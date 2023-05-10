@@ -75,7 +75,9 @@ class Event
 
     public function readSingle()
     {
-        $query = 'SELECT * FROM ' . $this->table . ' WHERE event_id = ? LIMIT 0,1';
+        $query = 'SELECT events.*, users.name AS user_name, users.email AS user_email, users.image_url AS user_image FROM ' . $this->table . '
+    JOIN users ON events.user_id = users.user_id
+    WHERE event_id = ? LIMIT 0,1';
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->event_id);
@@ -93,13 +95,18 @@ class Event
                 'banner_image' => $row['banner_image'],
                 'category_id' => $row['category_id'],
                 'city_id' => $row['city_id'],
-                'user_id' => $row['user_id'],
-                'slug' => $row['slug']
+                'slug' => $row['slug'],
+                'author' => [
+                    'name' => $row['user_name'],
+                    'email' => $row['user_email'],
+                    'image_url' => $row['user_image']
+                ]
             ];
         } else {
             return null;
         }
     }
+
 
 
     // Update Event
