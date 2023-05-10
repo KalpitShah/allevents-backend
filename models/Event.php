@@ -107,7 +107,40 @@ class Event
         }
     }
 
+    public function filterEvents($date = '', $category = '', $city = '')
+    {
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE 1=1';
 
+        if (!empty($date)) {
+            $query .= ' AND (DATE(start_time) <= :date AND DATE(end_time) >= :date)';
+        }
+
+        if (!empty($category)) {
+            $query .= ' AND category_id = :category';
+        }
+
+        if (!empty($city)) {
+            $query .= ' AND city_id = :city';
+        }
+
+        $stmt = $this->conn->prepare($query);
+
+        if (!empty($date)) {
+            $stmt->bindValue(':date', $date);
+        }
+
+        if (!empty($category)) {
+            $stmt->bindValue(':category', $category);
+        }
+
+        if (!empty($city)) {
+            $stmt->bindValue(':city', $city);
+        }
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     // Update Event
     public function update()

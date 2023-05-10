@@ -22,7 +22,6 @@ $num = $result->rowCount();
 if ($num > 0) {
     // City array
     $cities_arr = array();
-    $cities_arr['data'] = array();
 
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
@@ -34,7 +33,7 @@ if ($num > 0) {
         );
 
         // Push to "data"
-        array_push($cities_arr['data'], $city_item);
+        array_push($cities_arr, $city_item);
     }
 
     // Turn to JSON & output
