@@ -1,9 +1,12 @@
 <?php
 // Headers
-header('Access-Control-Allow-Origin: *');
+
 header('Content-Type: application/json');
-header("Access-Control-Allow-Methods: POST, OPTIONS, GET, PUT");
-header("Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With");
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Max-Age: 60');
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Headers: AccountKey,x-requested-with, Content-Type, origin, authorization, accept, client-security-token, host, date, cookie, cookie2");
 
 // Import required classes
 require_once '../../models/Event.php';

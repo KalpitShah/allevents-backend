@@ -24,41 +24,44 @@ class Event
     // Create Event
     public function create()
     {
-        $query = 'INSERT INTO ' . $this->table . ' SET name = :name, description = :description, start_time = :start_time, end_time = :end_time, location = :location, banner_image = :banner_image, category_id = :category_id, city_id = :city_id, user_id = :user_id, slug = :slug';
+        try {
+            $query = 'INSERT INTO ' . $this->table . ' SET name = :name, description = :description, start_time = :start_time, end_time = :end_time, location = :location, banner_image = :banner_image, category_id = :category_id, city_id = :city_id, user_id = :user_id, slug = :slug';
 
-        $stmt = $this->conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
 
-        // sanitize
-        $this->name = htmlspecialchars(strip_tags($this->name));
-        $this->description = htmlspecialchars(strip_tags($this->description));
-        $this->start_time = htmlspecialchars(strip_tags($this->start_time));
-        $this->end_time = htmlspecialchars(strip_tags($this->end_time));
-        $this->location = htmlspecialchars(strip_tags($this->location));
-        $this->banner_image = htmlspecialchars(strip_tags($this->banner_image));
-        $this->category_id = htmlspecialchars(strip_tags($this->category_id));
-        $this->city_id = htmlspecialchars(strip_tags($this->city_id));
-        $this->user_id = htmlspecialchars(strip_tags($this->user_id));
-        $this->slug = strtolower($this->name);
-        $this->slug = preg_replace('/[^a-z0-9]+/', '-', $this->slug);
-        $this->slug = trim($this->slug, '-');
+            // sanitize
+            $this->name = htmlspecialchars(strip_tags($this->name));
+            $this->description = htmlspecialchars(strip_tags($this->description));
+            $this->start_time = htmlspecialchars(strip_tags($this->start_time));
+            $this->end_time = htmlspecialchars(strip_tags($this->end_time));
+            $this->location = htmlspecialchars(strip_tags($this->location));
+            $this->banner_image = htmlspecialchars(strip_tags($this->banner_image));
+            $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+            $this->city_id = htmlspecialchars(strip_tags($this->city_id));
+            $this->user_id = htmlspecialchars(strip_tags($this->user_id));
+            $this->slug = strtolower($this->name);
+            $this->slug = preg_replace('/[^a-z0-9]+/', '-', $this->slug);
+            $this->slug = trim($this->slug, '-');
 
-        // bind parameters
-        $stmt->bindParam(':name', $this->name);
-        $stmt->bindParam(':description', $this->description);
-        $stmt->bindParam(':start_time', $this->start_time);
-        $stmt->bindParam(':end_time', $this->end_time);
-        $stmt->bindParam(':location', $this->location);
-        $stmt->bindParam(':banner_image', $this->banner_image);
-        $stmt->bindParam(':category_id', $this->category_id);
-        $stmt->bindParam(':city_id', $this->city_id);
-        $stmt->bindParam(':user_id', $this->user_id);
-        $stmt->bindParam(':slug', $this->slug);
+            // bind parameters
+            $stmt->bindParam(':name', $this->name);
+            $stmt->bindParam(':description', $this->description);
+            $stmt->bindParam(':start_time', $this->start_time);
+            $stmt->bindParam(':end_time', $this->end_time);
+            $stmt->bindParam(':location', $this->location);
+            $stmt->bindParam(':banner_image', $this->banner_image);
+            $stmt->bindParam(':category_id', $this->category_id);
+            $stmt->bindParam(':city_id', $this->city_id);
+            $stmt->bindParam(':user_id', $this->user_id);
+            $stmt->bindParam(':slug', $this->slug);
 
-        if ($stmt->execute()) {
-            return $this->conn->lastInsertId();
+            if ($stmt->execute()) {
+                return $this->conn->lastInsertId();
+            }
+
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage();
         }
-
-        printf("Error: %s.\n", $stmt->error);
 
         return null;
     }
